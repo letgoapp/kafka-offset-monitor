@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "org.reflections" % "reflections" % "0.9.10",
   "com.twitter" %% "util-core" % "6.40.0",
   "com.typesafe.slick" %% "slick" % "2.1.0",
-  "org.xerial" % "sqlite-jdbc" % "3.7.2",
+  "mysql" % "mysql-connector-java" % "6.0.6",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test")
 
