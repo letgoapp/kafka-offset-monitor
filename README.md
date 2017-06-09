@@ -67,6 +67,7 @@ java -Djava.security.auth.login.config=conf/server-client-jaas.conf \
      --refresh 10.seconds \
      --retain 2.days \
      --dbName offsetapp_kafka
+     --pluginsArgs datasource.url=jdbc:mysql://127.0.0.1:32768/kafkamonitor?useSSL=false,datasource.username=root,datasource.password=my-secret-pw,datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ```
 
@@ -83,6 +84,13 @@ The arguments are:
 - **kafkaOffsetForceFromStart** only applies to ''kafka'' format. Force KafkaOffsetMonitor to scan the commit messages from start (see notes below)
 - **stormZKOffsetBase** only applies to ''storm'' format.  Change the offset storage base in zookeeper, default to ''/stormconsumers'' (see notes below)
 - **pluginsArgs** additional arguments used by extensions (see below)
+
+
+### pluginsArgs: Mysql configuration
+- **datasource.url** jdbc url connection.
+- **datasource.username** User name for database connection.
+- **dasource.password** Password for database connection.
+- **asource.driver-class-name** JDBC driver class name. Default value: **com.mysql.cj.jdbc.Driver**
 
 Special Notes on Kafka Offset Storage
 ======================================
@@ -132,7 +140,7 @@ java -cp KafkaOffsetMonitor-assembly-0.3.0.jar:kafka-offset-monitor-another-db-r
      --port 8080 \
      --refresh 10.seconds \
      --retain 2.days
-     --pluginsArgs anotherDbHost=host1,anotherDbPort=555
+     --pluginsArgs anotherDbHost=host1,anotherDbPort=55
 ```
 
 For complete working example you can check [kafka-offset-monitor-graphite](https://github.com/allegro/kafka-offset-monitor-graphite), a plugin reporting offset information to Graphite.

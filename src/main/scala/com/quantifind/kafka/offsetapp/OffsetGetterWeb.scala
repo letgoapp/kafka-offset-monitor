@@ -5,7 +5,7 @@ import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
 
 import com.quantifind.kafka.OffsetGetter
 import com.quantifind.kafka.OffsetGetter.KafkaInfo
-import com.quantifind.kafka.offsetapp.sqlite.SQLiteOffsetInfoReporter
+import com.quantifind.kafka.offsetapp.mysql.MysqlOffsetInfoReporter
 import com.quantifind.sumac.validation.Required
 import com.quantifind.utils.UnfilteredWebApp
 import com.quantifind.utils.Utils.retry
@@ -33,7 +33,8 @@ class OWArgs extends OffsetGetterArgs with UnfilteredWebApp.Arguments {
 
   var dbName: String = "offsetapp"
 
-  lazy val db = new OffsetDB(dbName)
+  lazy val databaseConfig: DatabaseConfig = DatabaseArguments.parseArguments(pluginsArgs)
+  lazy val db = new OffsetDB(databaseConfig)
 
   var pluginsArgs : String = _
 }
@@ -174,9 +175,9 @@ object OffsetGetterWeb extends UnfilteredWebApp[OWArgs] with Logging {
 
     // SQLiteOffsetInfoReporter as a main storage is instantiated explicitly outside this loop so it is filtered out
     reportersSet
-      .filter(!_.equals(classOf[SQLiteOffsetInfoReporter]))
+      .filter(!_.equals(classOf[MysqlOffsetInfoReporter]))
       .map((reporterType: Class[_ <: OffsetInfoReporter]) =>  createReporterInstance(reporterType, args.pluginsArgs))
-      .+(new SQLiteOffsetInfoReporter(argHolder.db, args))
+      .+(new MysqlOffsetInfoReporter(argHolder.db, args))
   }
 
   def createReporterInstance(reporterClass: Class[_ <: OffsetInfoReporter], rawArgs: String): OffsetInfoReporter = {
