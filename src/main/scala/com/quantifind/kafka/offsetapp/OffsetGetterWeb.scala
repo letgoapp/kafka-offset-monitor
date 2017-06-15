@@ -173,7 +173,6 @@ object OffsetGetterWeb extends UnfilteredWebApp[OWArgs] with Logging {
 
     val reportersSet: mutable.Set[Class[_ <: OffsetInfoReporter]] = scala.collection.JavaConversions.asScalaSet(reportersTypes)
 
-    // SQLiteOffsetInfoReporter as a main storage is instantiated explicitly outside this loop so it is filtered out
     reportersSet
       .filter(!_.equals(classOf[MysqlOffsetInfoReporter]))
       .map((reporterType: Class[_ <: OffsetInfoReporter]) =>  createReporterInstance(reporterType, args.pluginsArgs))
